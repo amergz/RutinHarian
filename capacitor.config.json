@@ -1,0 +1,19 @@
+{
+  "appId": "com.rutinharian.app",
+  "appName": "Rutin Harian",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0a0c11",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "style": "DARK"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_timer",
+      "iconColor": "#4dd4ac"
+    }
+  }
+}

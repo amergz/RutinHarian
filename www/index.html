@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a0c11" />
+<meta name="color-scheme" content="dark light" />
+<meta name="format-detection" content="telephone=no" />
+<title>Rutin Harian</title>
+<link rel="icon" href="assets/icon-192.png" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <main id="view" class="view">
+
+    <!-- ================= TODAY ================= -->
+    <section id="tab-today" class="tab-panel active">
+
+      <header class="home-header">
+        <div class="home-top">
+          <div class="home-greet">
+            <p class="app-title">
+              <img class="app-logo" src="assets/icon-192.png" alt="" />
+              Rutin Harian
+            </p>
+            <h1 id="app-greeting" class="app-greeting">Assalamualaikum</h1>
+            <p id="today-date" class="today-date">—</p>
+          </div>
+          <button id="add-activity-btn" class="fab-add" aria-label="Add activity">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                 stroke="currentColor" stroke-width="2.6" stroke-linecap="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="hero-progress">
+          <div id="hero-ring" class="hero-ring" style="--p:0" role="img" aria-label="Daily progress">
+            <span id="daily-progress" class="hero-value">0%</span>
+          </div>
+          <div class="hero-left">
+            <span class="hero-label">Daily Progress</span>
+            <span id="hero-count" class="hero-count">No daily goals today</span>
+            <span id="streak-value" class="streak-chip">🔥 0 Day Streak</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title"><span>Today's Activities</span></h2>
+          <button class="section-toggle" data-toggle-activities>
+            <span class="toggle-label">Show all</span>
+            <svg class="toggle-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none"
+                 stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        </div>
+        <div id="activity-list" class="activity-list"></div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          <div class="empty-emoji">🌱</div>
+          <h3>Build Your Routine</h3>
+          <p>Create activities and track your goals<br>daily, weekly, monthly or yearly.</p>
+          <button id="empty-add-btn" class="btn btn-primary btn-lg">+ Create First Activity</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2 class="section-title"><span>Intermittent Fasting</span></h2>
+        </div>
+
+        <div id="fasting-idle" class="card fasting-card fasting-card--idle">
+          <div class="fasting-idle-emoji">⏳</div>
+          <h3 class="fasting-idle-title">Ready to fast?</h3>
+          <p class="fasting-idle-text">
+            Choose your fasting plan and start tracking your fasting journey.
+          </p>
+          <button id="open-fasting-btn" class="btn btn-primary btn-lg">Start Fasting</button>
+        </div>
+
+        <div id="fasting-active" class="fasting-card" hidden></div>
+        <div id="fasting-graph-wrap" class="fasting-graph-wrap"></div>
+        <div id="fasting-history" class="fasting-history" hidden></div>
+      </section>
+
+    </section>
+
+    <!-- ================= CALENDAR ================= -->
+    <section id="tab-calendar" class="tab-panel">
+      <header class="page-header">
+        <p class="eyebrow">Plan &amp; Review</p>
+        <h1>Calendar</h1>
+        <p class="page-sub">Plan ahead and review your history.</p>
+      </header>
+
+      <div class="cal-card">
+        <div class="cal-header">
+          <button class="cal-nav" id="cal-prev" aria-label="Previous month">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                 stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="cal-month" id="cal-month-label">—</button>
+          <button class="cal-nav" id="cal-next" aria-label="Next month">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                 stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="cal-collapsible" id="cal-collapsible">
+          <div class="cal-collapsible-inner">
+            <div class="cal-weekdays">
+              <span>Mon</span><span>Tue</span><span>Wed</span>
+              <span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+            <div id="cal-grid" class="cal-grid"></div>
+          </div>
+        </div>
+
+        <!-- Week preview: shown only when calendar is collapsed -->
+        <div class="cal-week-preview" id="cal-week-preview" hidden></div>
+
+        <div class="cal-toolbar">
+          <button class="cal-collapse-btn" id="cal-collapse" aria-expanded="true">
+            <span class="cal-collapse-label">Hide calendar</span>
+            <svg class="cal-collapse-chevron" viewBox="0 0 24 24" width="16" height="16"
+                 fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <button class="btn btn-ghost cal-today-btn" id="cal-today">Jump to Today</button>
+        </div>
+
+        <div class="cal-legend" aria-hidden="true">
+          <span><i class="cal-mini-dot activity"></i>Activity</span>
+          <span><i class="cal-mini-dot fasting"></i>Fasting</span>
+          <span><i class="cal-mini-dot task"></i>Task</span>
+          <span><i class="cal-mini-dot note"></i>Note</span>
+        </div>
+      </div>
+
+      <div id="cal-detail" class="cal-detail"></div>
+    </section>
+
+    <!-- ================= PROGRESS ================= -->
+    <section id="tab-progress" class="tab-panel">
+      <header class="page-header">
+        <p class="eyebrow">Dashboard</p>
+        <h1>Progress</h1>
+        <p class="page-sub">Your dashboard at a glance.</p>
+      </header>
+
+      <div class="period-switch" id="period-switch">
+        <button class="period-btn active" data-period="week">Week</button>
+        <button class="period-btn" data-period="month">Month</button>
+        <button class="period-btn" data-period="year">Year</button>
+      </div>
+
+      <div id="progress-body" class="progress-body"></div>
+    </section>
+
+    <!-- ================= PROFILE ================= -->
+    <section id="tab-profile" class="tab-panel">
+      <header class="page-header">
+        <p class="eyebrow">Account</p>
+        <h1>Profile</h1>
+        <p class="page-sub">Settings, reminders and data.</p>
+      </header>
+
+      <div id="profile-body" class="profile-body"></div>
+    </section>
+
+  </main>
+
+  <!-- ================= BOTTOM NAV ================= -->
+  <nav id="bottom-nav" class="bottom-nav" role="tablist" aria-label="Main navigation">
+    <button class="nav-btn active" data-tab="today" role="tab" aria-selected="true">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 10.5 12 3l9 7.5"/>
+          <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/>
+        </svg>
+      </span>
+      <span class="nav-label">Today</span>
+    </button>
+
+    <button class="nav-btn" data-tab="calendar" role="tab" aria-selected="false">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4.5" width="18" height="17" rx="3"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+          <line x1="8" y1="2.5" x2="8" y2="6.5"/>
+          <line x1="16" y1="2.5" x2="16" y2="6.5"/>
+        </svg>
+      </span>
+      <span class="nav-label">Calendar</span>
+    </button>
+
+    <button class="nav-btn" data-tab="progress" role="tab" aria-selected="false">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5"  y1="20" x2="5"  y2="13"/>
+          <line x1="10" y1="20" x2="10" y2="6"/>
+          <line x1="15" y1="20" x2="15" y2="11"/>
+          <line x1="20" y1="20" x2="20" y2="4"/>
+        </svg>
+      </span>
+      <span class="nav-label">Progress</span>
+    </button>
+
+    <button class="nav-btn" data-tab="profile" role="tab" aria-selected="false">
+      <span class="nav-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </span>
+      <span class="nav-label">Profile</span>
+    </button>
+  </nav>
+
+</div>
+
+<div id="modal-host"></div>
+<div id="fasting-setup-host"></div>
+<div id="sheet-host"></div>
+<div id="achievement-host"></div>
+<div id="notification-host"></div>
+
+<script src="js/storage.js"></script>
+<script src="js/xp.js"></script>
+<script src="js/achievements.js"></script>
+<script src="js/activities.js"></script>
+<script src="js/todos.js"></script>
+<script src="js/notes.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/sheet.js"></script>
+<script src="js/fasting.js"></script>
+<script src="js/fasting-ui.js"></script>
+<script src="js/fasting-graph.js"></script>
+<script src="js/reminders.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/progress.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/backup.js"></script>
+<script src="js/native.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
