@@ -30,8 +30,16 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      # Android SDK sudah dipasang dalam runner ubuntu-latest.
+      # Langkah ini hanya tetapkan laluan dan terima lesen.
+      - name: Use preinstalled Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "Android SDK: $ANDROID_SDK_ROOT"
+          SDKM="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ -x "$SDKM" ]; then
+            yes | "$SDKM" --licenses > [host-path] || true
+          fi
 
       - name: Create signing keystore (first run only)
         run: |
