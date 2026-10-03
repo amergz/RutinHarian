@@ -75,11 +75,19 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --stacktrace
 
-      - name: Rename APK
+           - name: Rename APK
         run: |
+          echo "APK files produced:"
+          find android[application]/build/outputs/apk -name "*.apk" -print
+          APK=$(find android[application]/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "No APK found"; exit 1
+          fi
+          case "$APK" in
+            *unsigned*) echo "WARNING: APK is unsigned, it cannot be installed: $APK" ;;
+          esac
           mkdir -p dist
-          cp android[application]/build/outputs/apk/release[application]-release.apk \
-             "dist/RutinHarian-v$(node -p "require('./package.json').version")-${{ github.run_number }}.apk"
+          cp "$APK" "dist/RutinHarian-v$(node -p "require('./package.json').version")-${{ github.run_number }}.apk"
           ls -la dist
 
       - name: Upload APK
