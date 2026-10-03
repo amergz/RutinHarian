@@ -30,8 +30,6 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      # Android SDK sudah dipasang dalam runner ubuntu-latest.
-      # Langkah ini hanya tetapkan laluan dan terima lesen.
       - name: Use preinstalled Android SDK
         run: |
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
@@ -75,11 +73,11 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon --stacktrace
 
-           - name: Rename APK
+      - name: Rename APK
         run: |
           echo "APK files produced:"
-          find android[application]/build/outputs/apk -name "*.apk" -print
-          APK=$(find android[application]/build/outputs/apk -name "*.apk" | head -n 1)
+          find android -path "*outputs/apk*" -name "*.apk" -print
+          APK=$(find android -path "*outputs/apk*" -name "*.apk" | head -n 1)
           if [ -z "$APK" ]; then
             echo "No APK found"; exit 1
           fi
@@ -87,7 +85,7 @@ jobs:
             *unsigned*) echo "WARNING: APK is unsigned, it cannot be installed: $APK" ;;
           esac
           mkdir -p dist
-          cp "$APK" "dist/RutinHarian-v$(node -p "require('./package.json').version")-${{ github.run_number }}.apk"
+          cp "$APK" "dist/RutinHarian-${{ github.run_number }}.apk"
           ls -la dist
 
       - name: Upload APK
